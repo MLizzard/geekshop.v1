@@ -8,6 +8,7 @@ class GeekshopApplicationTests {
 
 	@Test
 	void contextLoads() {
+		//method for context check
 	}
 
 }

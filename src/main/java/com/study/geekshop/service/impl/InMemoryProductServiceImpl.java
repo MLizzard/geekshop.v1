@@ -3,6 +3,8 @@ package com.study.geekshop.service.impl;
 import com.study.geekshop.model.Product;
 import com.study.geekshop.repository.InMemoryProductDao;
 import com.study.geekshop.service.ProductService;
+
+import java.util.ArrayList;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -10,6 +12,9 @@ import org.springframework.stereotype.Service;
 @Service
 @AllArgsConstructor
 public class InMemoryProductServiceImpl implements ProductService {
+    final List<Product> products = new ArrayList<>();
+
+
     private final InMemoryProductDao repository;
 
     @Override

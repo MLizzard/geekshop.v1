@@ -1,12 +1,9 @@
 package com.study.geekshop.service;
 
 import com.study.geekshop.model.Product;
-import java.util.ArrayList;
 import java.util.List;
 
 public interface ProductService {
-    final List<Product> products = new ArrayList<Product>();
-
     public List<Product> findAllProducts();
 
     public Product findByName(String name);
