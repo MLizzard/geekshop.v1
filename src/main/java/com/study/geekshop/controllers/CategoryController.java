@@ -1,8 +1,7 @@
 package com.study.geekshop.controllers;
-
-import com.study.geekshop.model.dto.request.ProductRequestDTO;
-import com.study.geekshop.model.dto.response.ProductResponseDTO;
-import com.study.geekshop.service.ProductService;
+import com.study.geekshop.model.dto.request.CategoryRequestDTO;
+import com.study.geekshop.model.dto.response.CategoryResponseDTO;
+import com.study.geekshop.service.CategoryService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -15,34 +14,35 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/products")
+@RequestMapping("/categories")
 @RequiredArgsConstructor
-public class ProductController {
+public class CategoryController {
 
-    private final ProductService productService;
+    private final CategoryService categoryService;
 
     @GetMapping
-    public List<ProductResponseDTO> findAll() {
-        return productService.findAll();
+    public List<CategoryResponseDTO> findAll() {
+        return categoryService.findAll();
     }
 
     @GetMapping("/{id}")
-    public ProductResponseDTO findById(@PathVariable Long id) {
-        return productService.findById(id);
+    public CategoryResponseDTO findById(@PathVariable Long id) {
+        return categoryService.findById(id);
     }
 
     @PostMapping
-    public ProductResponseDTO create(@RequestBody ProductRequestDTO dto) {
-        return productService.create(dto);
+    public CategoryResponseDTO create(@RequestBody CategoryRequestDTO dto) {
+        return categoryService.create(dto);
     }
 
     @PutMapping("/{id}")
-    public ProductResponseDTO update(@PathVariable Long id, @RequestBody ProductRequestDTO dto) {
-        return productService.update(id, dto);
+    public CategoryResponseDTO update(@PathVariable Long id, @RequestBody CategoryRequestDTO dto) {
+        return categoryService.update(id, dto);
     }
 
     @DeleteMapping("/{id}")
     public void delete(@PathVariable Long id) {
-        productService.delete(id);
+        categoryService.delete(id);
     }
 }
+

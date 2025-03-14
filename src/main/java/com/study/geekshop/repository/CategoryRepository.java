@@ -1,6 +1,6 @@
 package com.study.geekshop.repository;
 
-import com.study.geekshop.model.Category;
+import com.study.geekshop.model.entity.Category;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

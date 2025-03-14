@@ -1,4 +1,4 @@
-package com.study.geekshop.enums;
+package com.study.geekshop.model.enums;
 
 public enum OrderStatus {
     NEW,       // Новый заказ

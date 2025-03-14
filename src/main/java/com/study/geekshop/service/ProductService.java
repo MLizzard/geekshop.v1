@@ -1,18 +1,14 @@
 package com.study.geekshop.service;
 
-import com.study.geekshop.model.Product;
+import com.study.geekshop.model.dto.request.ProductRequestDTO;
+import com.study.geekshop.model.dto.response.ProductResponseDTO;
+import com.study.geekshop.model.entity.Product;
 import java.util.List;
 
 public interface ProductService {
-    public List<Product> findAllProducts();
-
-    public Product findByName(String name);
-
-    public Product findByIndex(int index);
-
-    Product saveProduct(Product product);
-
-    Product updateProduct(Product product);
-
-    void deleteProduct(int index);
+    List<ProductResponseDTO> findAll();
+    ProductResponseDTO findById(Long id);
+    ProductResponseDTO create(ProductRequestDTO dto);
+    ProductResponseDTO update(Long id, ProductRequestDTO dto);
+    void delete(Long id);
 }

@@ -1,6 +1,6 @@
 package com.study.geekshop.repository;
 
-import com.study.geekshop.model.Product;
+import com.study.geekshop.model.entity.Product;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.stereotype.Repository;
@@ -23,9 +23,11 @@ public class InMemoryProductDao {
         return null;
     }
 
-    public Product findByIndex(int index) {
-        if (index >= 0 && index < products.size()) {
-            return products.get(index);
+    public Product findById(Long id) { // Find by ID
+        for (Product product : products) {
+            if (product.getId().equals(id)) {
+                return product;
+            }
         }
         return null;
     }
@@ -44,10 +46,7 @@ public class InMemoryProductDao {
         return null;
     }
 
-    public void deleteProduct(int index) {
-        var product = products.get(index);
-        if (product != null) {
-            products.remove(product);
-        }
+    public void deleteProduct(Long id) { // Delete by ID
+        products.removeIf(product -> product.getId().equals(id));
     }
 }
