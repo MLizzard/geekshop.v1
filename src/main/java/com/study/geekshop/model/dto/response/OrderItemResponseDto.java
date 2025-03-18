@@ -5,9 +5,9 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class OrderItemResponseDTO {
+public class OrderItemResponseDto {
     private Long id;
-    private ProductResponseDTO product;
+    private ProductResponseDto product;
     private int quantity;
     private double price;
 }

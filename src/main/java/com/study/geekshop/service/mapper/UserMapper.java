@@ -1,7 +1,7 @@
 package com.study.geekshop.service.mapper;
 
-import com.study.geekshop.model.dto.request.UserRequestDTO;
-import com.study.geekshop.model.dto.response.UserResponseDTO;
+import com.study.geekshop.model.dto.request.UserRequestDto;
+import com.study.geekshop.model.dto.response.UserResponseDto;
 import com.study.geekshop.model.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 public class UserMapper {
     private final OrderMapper orderMapper; // Внедряем OrderMapper
 
-    public User toEntity(UserRequestDTO dto) {
+    public User toEntity(UserRequestDto dto) {
         User user = new User();
         user.setUsername(dto.getUsername());
         user.setEmail(dto.getEmail());
@@ -21,8 +21,9 @@ public class UserMapper {
         user.setBirthDate(dto.getBirthDate());
         return user;
     }
-    public UserResponseDTO toDTO(User user) {
-        return new UserResponseDTO(
+
+    public UserResponseDto toDto(User user) {
+        return new UserResponseDto(
                 user.getId(),
                 user.getUsername(),
                 user.getEmail(),

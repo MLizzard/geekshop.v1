@@ -1,7 +1,7 @@
 package com.study.geekshop.service.impl;
 
 import com.study.geekshop.exceptions.UserNotFoundException;
-import com.study.geekshop.model.dto.request.UserRequestDTO;
+import com.study.geekshop.model.dto.request.UserRequestDto;
 import com.study.geekshop.model.entity.User;
 import com.study.geekshop.repository.UserRepository;
 import com.study.geekshop.service.UserService;
@@ -28,13 +28,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User createUser(UserRequestDTO dto) {
+    public User createUser(UserRequestDto dto) {
         User user = userMapper.toEntity(dto);
         return userRepository.save(user);
     }
 
     @Override
-    public User updateUser(Long id, UserRequestDTO dto) {
+    public User updateUser(Long id, UserRequestDto dto) {
         User existingUser = getUserById(id);
         existingUser.setUsername(dto.getUsername());
         existingUser.setEmail(dto.getEmail());

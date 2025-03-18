@@ -7,7 +7,11 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class CategoryResponseDTO {
+public class ProductResponseDto {
     private Long id;
     private String name;
+    private double price;
+    private String description;
+    private boolean inStock;
+    private CategoryResponseDto category;
 }

@@ -1,7 +1,7 @@
 package com.study.geekshop.controllers;
 
-import com.study.geekshop.model.dto.request.ProductRequestDTO;
-import com.study.geekshop.model.dto.response.ProductResponseDTO;
+import com.study.geekshop.model.dto.request.ProductRequestDto;
+import com.study.geekshop.model.dto.response.ProductResponseDto;
 import com.study.geekshop.service.ProductService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -22,22 +22,22 @@ public class ProductController {
     private final ProductService productService;
 
     @GetMapping
-    public List<ProductResponseDTO> findAll() {
+    public List<ProductResponseDto> findAll() {
         return productService.findAll();
     }
 
     @GetMapping("/{id}")
-    public ProductResponseDTO findById(@PathVariable Long id) {
+    public ProductResponseDto findById(@PathVariable Long id) {
         return productService.findById(id);
     }
 
     @PostMapping
-    public ProductResponseDTO create(@RequestBody ProductRequestDTO dto) {
+    public ProductResponseDto create(@RequestBody ProductRequestDto dto) {
         return productService.create(dto);
     }
 
     @PutMapping("/{id}")
-    public ProductResponseDTO update(@PathVariable Long id, @RequestBody ProductRequestDTO dto) {
+    public ProductResponseDto update(@PathVariable Long id, @RequestBody ProductRequestDto dto) {
         return productService.update(id, dto);
     }
 

@@ -3,15 +3,15 @@ package com.study.geekshop.model.dto.response;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
 @AllArgsConstructor
-public class UserResponseDTO {
+public class OrderResponseDto {
     private Long id;
     private String username;
-    private String email;
-    private LocalDate birthDate;
-    private List<OrderResponseDTO> orders;
+    private LocalDateTime orderDate;
+    private String status;
+    private List<OrderItemResponseDto> items;
 }

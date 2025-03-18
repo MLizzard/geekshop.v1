@@ -1,6 +1,7 @@
 package com.study.geekshop.controllers;
-import com.study.geekshop.model.dto.request.CategoryRequestDTO;
-import com.study.geekshop.model.dto.response.CategoryResponseDTO;
+
+import com.study.geekshop.model.dto.request.CategoryRequestDto;
+import com.study.geekshop.model.dto.response.CategoryResponseDto;
 import com.study.geekshop.service.CategoryService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -21,22 +22,22 @@ public class CategoryController {
     private final CategoryService categoryService;
 
     @GetMapping
-    public List<CategoryResponseDTO> findAll() {
+    public List<CategoryResponseDto> findAll() {
         return categoryService.findAll();
     }
 
     @GetMapping("/{id}")
-    public CategoryResponseDTO findById(@PathVariable Long id) {
+    public CategoryResponseDto findById(@PathVariable Long id) {
         return categoryService.findById(id);
     }
 
     @PostMapping
-    public CategoryResponseDTO create(@RequestBody CategoryRequestDTO dto) {
+    public CategoryResponseDto create(@RequestBody CategoryRequestDto dto) {
         return categoryService.create(dto);
     }
 
     @PutMapping("/{id}")
-    public CategoryResponseDTO update(@PathVariable Long id, @RequestBody CategoryRequestDTO dto) {
+    public CategoryResponseDto update(@PathVariable Long id, @RequestBody CategoryRequestDto dto) {
         return categoryService.update(id, dto);
     }
 

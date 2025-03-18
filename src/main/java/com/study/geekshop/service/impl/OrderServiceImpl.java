@@ -1,10 +1,11 @@
 package com.study.geekshop.service.impl;
 
 import com.study.geekshop.exceptions.OrderNotFoundException;
-import com.study.geekshop.model.dto.request.OrderItemRequestDTO;
-import com.study.geekshop.model.dto.request.OrderRequestDTO;
-import com.study.geekshop.model.dto.response.OrderItemResponseDTO;
-import com.study.geekshop.model.dto.response.OrderResponseDTO;
+import com.study.geekshop.exceptions.UserNotFoundException;
+import com.study.geekshop.model.dto.request.OrderItemRequestDto;
+import com.study.geekshop.model.dto.request.OrderRequestDto;
+import com.study.geekshop.model.dto.response.OrderItemResponseDto;
+import com.study.geekshop.model.dto.response.OrderResponseDto;
 import com.study.geekshop.model.entity.Order;
 import com.study.geekshop.model.entity.OrderItem;
 import com.study.geekshop.model.entity.User;
@@ -28,24 +29,24 @@ public class OrderServiceImpl implements OrderService {
     private final OrderItemMapper orderItemMapper;
 
     @Override
-    public List<OrderResponseDTO> findAllOrders() {
+    public List<OrderResponseDto> findAllOrders() {
         return orderRepository.findAll().stream()
                 .map(orderMapper::toDTO)
                 .toList();
     }
 
     @Override
-    public OrderResponseDTO findOrderById(Long orderId) {
+    public OrderResponseDto findOrderById(Long orderId) {
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(() -> new OrderNotFoundException("Order  not found"));
         return orderMapper.toDTO(order);
     }
 
     @Override
-    public OrderResponseDTO createOrder(OrderRequestDTO orderRequestDTO) {
+    public OrderResponseDto createOrder(OrderRequestDto orderRequestDTO) {
         Order order = orderMapper.toEntity(orderRequestDTO);
         User user = userRepository.findById(orderRequestDTO.getUserId())
-                .orElseThrow(() -> new OrderNotFoundException("User not found"));
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
         order.setUser(user);
 
         List<OrderItem> orderItems = orderRequestDTO.getItems().stream()
@@ -59,9 +60,9 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public OrderResponseDTO updateOrder(Long orderId, OrderRequestDTO orderRequestDTO) {
+    public OrderResponseDto updateOrder(Long orderId, OrderRequestDto orderRequestDTO) {
         Order existingOrder = orderRepository.findById(orderId)
-                .orElseThrow(() -> new RuntimeException("Order not found"));
+                .orElseThrow(() -> new OrderNotFoundException("Order not found"));
 
         orderMapper.updateEntity(existingOrder, orderRequestDTO);
 
@@ -84,21 +85,21 @@ public class OrderServiceImpl implements OrderService {
     // CRUD для OrderItem
 
     @Override
-    public List<OrderItemResponseDTO> getAllOrderItemsByOrderId(Long orderId) {
+    public List<OrderItemResponseDto> getAllOrderItemsByOrderId(Long orderId) {
         return orderItemRepository.findByOrderId(orderId).stream()
-                .map(orderItemMapper::toDTO)
+                .map(orderItemMapper::toDto)
                 .toList();
     }
 
     @Override
-    public OrderItemResponseDTO getOrderItemById(Long orderId, Long itemId) {
+    public OrderItemResponseDto getOrderItemById(Long orderId, Long itemId) {
         OrderItem orderItem = orderItemRepository.findByIdAndOrderId(itemId, orderId)
                 .orElseThrow(() -> new OrderNotFoundException("OrderItem  not found"));
-        return orderItemMapper.toDTO(orderItem);
+        return orderItemMapper.toDto(orderItem);
     }
 
     @Override
-    public OrderItemResponseDTO createOrderItem(Long orderId, OrderItemRequestDTO orderItemRequestDTO) {
+    public OrderItemResponseDto createOrderItem(Long orderId, OrderItemRequestDto orderItemRequestDTO) {
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(() -> new OrderNotFoundException("Order not found"));
 
@@ -106,18 +107,18 @@ public class OrderServiceImpl implements OrderService {
         orderItem.setOrder(order);
 
         OrderItem savedOrderItem = orderItemRepository.save(orderItem);
-        return orderItemMapper.toDTO(savedOrderItem);
+        return orderItemMapper.toDto(savedOrderItem);
     }
 
     @Override
-    public OrderItemResponseDTO updateOrderItem(Long orderId, Long itemId, OrderItemRequestDTO orderItemRequestDTO) {
+    public OrderItemResponseDto updateOrderItem(Long orderId, Long itemId, OrderItemRequestDto orderItemRequestDTO) {
         OrderItem orderItem = orderItemRepository.findByIdAndOrderId(itemId, orderId)
                 .orElseThrow(() -> new OrderNotFoundException("OrderItem not found"));
 
         orderItemMapper.updateEntity(orderItem, orderItemRequestDTO);
 
         OrderItem updatedOrderItem = orderItemRepository.save(orderItem);
-        return orderItemMapper.toDTO(updatedOrderItem);
+        return orderItemMapper.toDto(updatedOrderItem);
     }
 
     @Override

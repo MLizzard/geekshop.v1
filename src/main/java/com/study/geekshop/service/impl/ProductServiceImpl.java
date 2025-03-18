@@ -1,7 +1,9 @@
 package com.study.geekshop.service.impl;
 
-import com.study.geekshop.model.dto.request.ProductRequestDTO;
-import com.study.geekshop.model.dto.response.ProductResponseDTO;
+import com.study.geekshop.exceptions.CategoryNotFoundException;
+import com.study.geekshop.exceptions.ProductNotFoundException;
+import com.study.geekshop.model.dto.request.ProductRequestDto;
+import com.study.geekshop.model.dto.response.ProductResponseDto;
 import com.study.geekshop.model.entity.Category;
 import com.study.geekshop.model.entity.Product;
 import com.study.geekshop.repository.CategoryRepository;
@@ -25,7 +27,7 @@ public class ProductServiceImpl implements ProductService {
     private final ProductMapper productMapper;
 
     @Override
-    public List<ProductResponseDTO> findAll() {
+    public List<ProductResponseDto> findAll() {
         return productRepository.findAll()
                 .stream()
                 .map(productMapper::toDTO)
@@ -33,26 +35,26 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public ProductResponseDTO findById(Long id) {
+    public ProductResponseDto findById(Long id) {
         Product product = productRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Продукт не найден"));
+                .orElseThrow(() -> new ProductNotFoundException("Продукт не найден"));
         return productMapper.toDTO(product);
     }
 
     @Override
-    public ProductResponseDTO create(ProductRequestDTO dto) {
+    public ProductResponseDto create(ProductRequestDto dto) {
         Product product = productMapper.toEntity(dto);
         Category category = categoryRepository.findById(dto.getCategoryId())
-                .orElseThrow(() -> new RuntimeException("Категория не найдена"));
+                .orElseThrow(() -> new CategoryNotFoundException("Категория не найдена"));
         product.setCategory(category);
         product = productRepository.save(product);
         return productMapper.toDTO(product);
     }
 
     @Override
-    public ProductResponseDTO update(Long id, ProductRequestDTO dto) {
+    public ProductResponseDto update(Long id, ProductRequestDto dto) {
         Product product = productRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Продукт не найден"));
+                .orElseThrow(() -> new ProductNotFoundException("Продукт не найден"));
 
         product.setName(dto.getName());
         product.setPrice(dto.getPrice());
@@ -60,7 +62,7 @@ public class ProductServiceImpl implements ProductService {
         product.setInStock(dto.isInStock());
 
         Category category = categoryRepository.findById(dto.getCategoryId())
-                .orElseThrow(() -> new RuntimeException("Категория не найдена"));
+                .orElseThrow(() -> new CategoryNotFoundException("Категория не найдена"));
         product.setCategory(category);
 
         return productMapper.toDTO(productRepository.save(product));
