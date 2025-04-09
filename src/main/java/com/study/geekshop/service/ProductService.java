@@ -10,6 +10,12 @@ public interface ProductService {
 
     ProductResponseDto findById(Long id);
 
+    List<ProductResponseDto> findAllByCategoryId(Long id);
+
+    List<ProductResponseDto> findAllByCategoryName(String name);
+
+    List<ProductResponseDto> findAllByPriceRangeAndCategoryName(Double minPrice, Double maxPrice, String categoryName);
+
     ProductResponseDto create(ProductRequestDto dto);
 
     ProductResponseDto update(Long id, ProductRequestDto dto);

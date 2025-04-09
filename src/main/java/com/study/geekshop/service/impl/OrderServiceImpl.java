@@ -1,5 +1,6 @@
 package com.study.geekshop.service.impl;
 
+import com.study.geekshop.cache.OrderCache;
 import com.study.geekshop.exceptions.OrderNotFoundException;
 import com.study.geekshop.exceptions.UserNotFoundException;
 import com.study.geekshop.model.dto.request.OrderItemRequestDto;
@@ -27,6 +28,7 @@ public class OrderServiceImpl implements OrderService {
     private final UserRepository userRepository;
     private final OrderMapper orderMapper;
     private final OrderItemMapper orderItemMapper;
+    private final OrderCache orderCache;
 
     @Override
     public List<OrderResponseDto> findAllOrders() {
@@ -37,6 +39,10 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public OrderResponseDto findOrderById(Long orderId) {
+        Order orderFromCache = orderCache.get(orderId);
+        if (orderFromCache != null){
+            return orderMapper.toDTO(orderFromCache);
+        }
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(() -> new OrderNotFoundException("Order  not found"));
         return orderMapper.toDTO(order);
@@ -51,11 +57,11 @@ public class OrderServiceImpl implements OrderService {
 
         List<OrderItem> orderItems = orderRequestDTO.getItems().stream()
                 .map(orderItemMapper::toEntity)
-                .peek(orderItem -> orderItem.setOrder(order))
                 .toList();
         order.setItems(orderItems);
 
         Order savedOrder = orderRepository.save(order);
+        orderCache.put(savedOrder.getId(), savedOrder);
         return orderMapper.toDTO(savedOrder);
     }
 
@@ -68,18 +74,19 @@ public class OrderServiceImpl implements OrderService {
 
         List<OrderItem> updatedItems = orderRequestDTO.getItems().stream()
                 .map(orderItemMapper::toEntity)
-                .peek(orderItem -> orderItem.setOrder(existingOrder))
                 .toList();
         existingOrder.getItems().clear();
         existingOrder.getItems().addAll(updatedItems);
 
         Order updatedOrder = orderRepository.save(existingOrder);
+        orderCache.put(updatedOrder.getId(), updatedOrder);
         return orderMapper.toDTO(updatedOrder);
     }
 
     @Override
     public void deleteOrder(Long orderId) {
         orderRepository.deleteById(orderId);
+        orderCache.remove(orderId);
     }
 
     // CRUD для OrderItem

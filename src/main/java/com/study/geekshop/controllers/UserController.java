@@ -17,24 +17,22 @@ public class UserController {
 
     @GetMapping
     public List<UserResponseDto> getAllUsers() {
-        return userService.getAllUsers().stream()
-                .map(userMapper::toDto)
-                .toList();
+        return userService.getAllUsers();
     }
 
     @GetMapping("/{id}")
     public UserResponseDto getUserById(@PathVariable Long id) {
-        return userMapper.toDto(userService.getUserById(id));
+        return userService.getUserById(id);
     }
 
     @PostMapping
     public UserResponseDto createUser(@RequestBody UserRequestDto dto) {
-        return userMapper.toDto(userService.createUser(dto));
+        return userService.createUser(dto);
     }
 
     @PutMapping("/{id}")
     public UserResponseDto updateUser(@PathVariable Long id, @RequestBody UserRequestDto dto) {
-        return userMapper.toDto(userService.updateUser(id, dto));
+        return userService.updateUser(id, dto);
     }
 
     @DeleteMapping("/{id}")
