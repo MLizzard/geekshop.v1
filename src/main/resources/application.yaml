@@ -15,4 +15,15 @@ spring:
         format_sql: true
   web:
     path: /api/v1
-
+logging:
+  file:
+    path: logs/app.log
+  logback:
+    rollingpolicy:
+      max-file-size: 10MB
+      max-history: 10
+  level:
+    root: INFO
+    com.study.geekshop: DEBUG
+  pattern:
+    file: "%d{dd-MM-yyyy HH:mm:ss} %-5level %logger - %msg%n"
