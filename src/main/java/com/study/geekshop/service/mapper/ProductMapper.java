@@ -14,13 +14,14 @@ public class ProductMapper {
         product.setName(dto.getName());
         product.setPrice(dto.getPrice());
         product.setDescription(dto.getDescription());
-        product.setInStock(dto.isInStock());
+        product.setInStock(dto.getInStock());
         return product;
     }
 
-    public ProductResponseDto toDTO(Product product) {
-        CategoryResponseDto categoryDTO = (product.getCategory() != null)
-                ? new CategoryResponseDto(product.getCategory().getId(), product.getCategory().getName())
+    public ProductResponseDto toDto(Product product) {
+        CategoryResponseDto categoryDto = (product.getCategory() != null)
+                ? new CategoryResponseDto(product.getCategory().getId(),
+                                            product.getCategory().getName())
                 : null;
 
         return new ProductResponseDto(
@@ -29,7 +30,7 @@ public class ProductMapper {
                 product.getPrice(),
                 product.getDescription(),
                 product.isInStock(),
-                categoryDTO
+                categoryDto
         );
     }
 }

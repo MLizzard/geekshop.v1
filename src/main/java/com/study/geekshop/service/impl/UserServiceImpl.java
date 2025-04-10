@@ -8,9 +8,9 @@ import com.study.geekshop.model.entity.User;
 import com.study.geekshop.repository.UserRepository;
 import com.study.geekshop.service.UserService;
 import com.study.geekshop.service.mapper.UserMapper;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -21,16 +21,16 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<UserResponseDto> getAllUsers() {
-        return userRepository.findAll().
-                stream().
-                map(userMapper::toDto).
-                toList();
+        return userRepository.findAll()
+            .stream()
+            .map(userMapper::toDto)
+            .toList();
     }
 
     @Override
     public UserResponseDto getUserById(Long id) {
         User userFromCache = userCache.get(id);
-        if (userFromCache != null){
+        if (userFromCache != null) {
             return userMapper.toDto(userFromCache);
         }
         User user = userRepository.findById(id)
@@ -48,8 +48,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserResponseDto updateUser(Long id, UserRequestDto dto) {
-        User existingUser = userRepository.findById(id).
-                orElseThrow(() ->new UserNotFoundException("Пользователь не найден"));
+        User existingUser = userRepository.findById(id)
+            .orElseThrow(() -> new UserNotFoundException("Пользователь не найден"));
         existingUser.setUsername(dto.getUsername());
         existingUser.setEmail(dto.getEmail());
         existingUser.setPassword(dto.getPassword());

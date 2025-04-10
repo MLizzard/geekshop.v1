@@ -16,7 +16,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Primary
 @Service
@@ -33,7 +32,7 @@ public class ProductServiceImpl implements ProductService {
     public List<ProductResponseDto> findAll() {
         return productRepository.findAll()
                 .stream()
-                .map(productMapper::toDTO)
+                .map(productMapper::toDto)
                 .toList();
     }
 
@@ -41,28 +40,28 @@ public class ProductServiceImpl implements ProductService {
     public ProductResponseDto findById(Long id) {
         Product productFromCache = productCache.get(id);
         if (productFromCache != null) {
-            return productMapper.toDTO(productFromCache);
+            return productMapper.toDto(productFromCache);
         }
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new ProductNotFoundException("Продукт не найден"));
         productCache.put(id, product);
-        return productMapper.toDTO(product);
+        return productMapper.toDto(product);
     }
 
     @Override
     public List<ProductResponseDto> findAllByCategoryId(Long id) {
-        return productRepository.findAllByCategoryId(id).
-                stream().
-                map(productMapper::toDTO).
-                toList();
+        return productRepository.findAllByCategoryId(id)
+                .stream()
+                .map(productMapper::toDto)
+                .toList();
     }
 
     @Override
     public List<ProductResponseDto> findAllByCategoryName(String name) {
-        return productRepository.findAllByCategoryName(name).
-                stream().
-                map(productMapper::toDTO).
-                toList();
+        return productRepository.findAllByCategoryName(name)
+                .stream()
+                .map(productMapper::toDto)
+                .toList();
     }
 
     @Override
@@ -70,14 +69,14 @@ public class ProductServiceImpl implements ProductService {
             Double minPrice,
             Double maxPrice,
             String categoryName) {
-        return productRepository.
-                findProductsByPriceRangeAndCategoryId(
+        return productRepository
+                .findProductsByPriceRangeAndCategoryId(
                         minPrice,
                         maxPrice,
-                        categoryName).
-                stream().
-                map(productMapper::toDTO).
-                toList();
+                        categoryName)
+                .stream()
+                .map(productMapper::toDto)
+                .toList();
     }
 
     @Override
@@ -88,7 +87,7 @@ public class ProductServiceImpl implements ProductService {
         product.setCategory(category);
         product = productRepository.save(product);
         productCache.put(product.getId(), product);
-        return productMapper.toDTO(product);
+        return productMapper.toDto(product);
     }
 
     @Override
@@ -99,13 +98,13 @@ public class ProductServiceImpl implements ProductService {
         product.setName(dto.getName());
         product.setPrice(dto.getPrice());
         product.setDescription(dto.getDescription());
-        product.setInStock(dto.isInStock());
+        product.setInStock(dto.getInStock());
 
         Category category = categoryRepository.findById(dto.getCategoryId())
                 .orElseThrow(() -> new CategoryNotFoundException("Категория не найдена"));
         product.setCategory(category);
         productCache.put(id, product);
-        return productMapper.toDTO(productRepository.save(product));
+        return productMapper.toDto(productRepository.save(product));
     }
 
     @Override

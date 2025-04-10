@@ -1,10 +1,9 @@
 package com.study.geekshop.model.dto.response;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
-
 import java.time.LocalDate;
 import java.util.List;
+import lombok.Data;
 
 @Data
 @AllArgsConstructor

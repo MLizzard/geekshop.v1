@@ -28,7 +28,8 @@ public class OrderMapper {
 
         // Находим пользователя
         User user = userRepository.findById(orderRequestDto.getUserId())
-                .orElseThrow(() -> new RuntimeException("User not found with id: " + orderRequestDto.getUserId()));
+                .orElseThrow(() -> new RuntimeException(
+                        "User not found with id: " + orderRequestDto.getUserId()));
 
         // Создаем заказ
         Order order = new Order();
@@ -46,7 +47,8 @@ public class OrderMapper {
 
         return order;
     }
-    public OrderResponseDto toDTO(Order order) {
+
+    public OrderResponseDto toDto(Order order) {
         List<OrderItemResponseDto> items = order.getItems().stream()
                 .map(orderItem -> new OrderItemResponseDto(
                         orderItem.getId(),
@@ -56,7 +58,8 @@ public class OrderMapper {
                                 orderItem.getProduct().getPrice(),
                                 orderItem.getProduct().getDescription(),
                                 orderItem.getProduct().isInStock(),
-                                categoryMapper.toDto(orderItem.getProduct().getCategory()) // Категория
+                                categoryMapper
+                                        .toDto(orderItem.getProduct().getCategory()) // Категория
                         ),
                         orderItem.getQuantity(),
                         orderItem.getPrice()
@@ -71,6 +74,7 @@ public class OrderMapper {
                 items
         );
     }
+
     public void updateEntity(Order order, OrderRequestDto dto) {
         order.setStatus(OrderStatus.valueOf(OrderStatus.NEW.name()));
     }

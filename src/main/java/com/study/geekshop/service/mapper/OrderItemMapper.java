@@ -28,7 +28,7 @@ public class OrderItemMapper {
     public OrderItemResponseDto toDto(OrderItem orderItem) {
         return new OrderItemResponseDto(
                 orderItem.getId(),
-                productMapper.toDTO(orderItem.getProduct()),
+                productMapper.toDto(orderItem.getProduct()),
                 orderItem.getQuantity(),
                 orderItem.getPrice()
         );

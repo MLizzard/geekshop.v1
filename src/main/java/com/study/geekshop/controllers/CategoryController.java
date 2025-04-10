@@ -4,6 +4,8 @@ import com.study.geekshop.model.dto.request.CategoryRequestDto;
 import com.study.geekshop.model.dto.response.CategoryResponseDto;
 import com.study.geekshop.service.CategoryService;
 import java.util.List;
+
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,12 +34,12 @@ public class CategoryController {
     }
 
     @PostMapping
-    public CategoryResponseDto create(@RequestBody CategoryRequestDto dto) {
+    public CategoryResponseDto create(@Valid @RequestBody CategoryRequestDto dto) {
         return categoryService.create(dto);
     }
 
     @PutMapping("/{id}")
-    public CategoryResponseDto update(@PathVariable Long id, @RequestBody CategoryRequestDto dto) {
+    public CategoryResponseDto update(@PathVariable Long id, @Valid @RequestBody CategoryRequestDto dto) {
         return categoryService.update(id, dto);
     }
 

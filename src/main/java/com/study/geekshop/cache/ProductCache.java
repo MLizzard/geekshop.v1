@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class ProductCache extends LfuCache<Product> {
-    public ProductCache(){
+    public ProductCache() {
         super(100);
     }
 }

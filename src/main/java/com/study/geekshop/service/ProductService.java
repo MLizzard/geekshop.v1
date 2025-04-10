@@ -2,7 +2,6 @@ package com.study.geekshop.service;
 
 import com.study.geekshop.model.dto.request.ProductRequestDto;
 import com.study.geekshop.model.dto.response.ProductResponseDto;
-
 import java.util.List;
 
 public interface ProductService {
@@ -14,7 +13,9 @@ public interface ProductService {
 
     List<ProductResponseDto> findAllByCategoryName(String name);
 
-    List<ProductResponseDto> findAllByPriceRangeAndCategoryName(Double minPrice, Double maxPrice, String categoryName);
+    List<ProductResponseDto> findAllByPriceRangeAndCategoryName(Double minPrice,
+                                                                Double maxPrice,
+                                                                String categoryName);
 
     ProductResponseDto create(ProductRequestDto dto);
 

@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class CategoryCache extends LfuCache<Category> {
-    public CategoryCache(){
+    public CategoryCache() {
         super(100);
     }
 }

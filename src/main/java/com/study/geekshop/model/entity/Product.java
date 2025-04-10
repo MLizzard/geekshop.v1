@@ -1,7 +1,6 @@
 package com.study.geekshop.model.entity;
 
 import jakarta.persistence.*;
-
 import java.util.List;
 import lombok.Data;
 

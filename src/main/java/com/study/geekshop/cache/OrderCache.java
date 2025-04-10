@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class OrderCache extends LfuCache<Order> {
-    public OrderCache(){
+    public OrderCache() {
         super(100);
     }
 }

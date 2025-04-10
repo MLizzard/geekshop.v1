@@ -4,6 +4,7 @@ import com.study.geekshop.model.dto.request.UserRequestDto;
 import com.study.geekshop.model.dto.response.UserResponseDto;
 import com.study.geekshop.service.UserService;
 import com.study.geekshop.service.mapper.UserMapper;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
@@ -26,12 +27,13 @@ public class UserController {
     }
 
     @PostMapping
-    public UserResponseDto createUser(@RequestBody UserRequestDto dto) {
+    public UserResponseDto createUser(@Valid @RequestBody UserRequestDto dto) {
         return userService.createUser(dto);
     }
 
     @PutMapping("/{id}")
-    public UserResponseDto updateUser(@PathVariable Long id, @RequestBody UserRequestDto dto) {
+    public UserResponseDto updateUser(@PathVariable Long id,
+                                      @Valid @RequestBody UserRequestDto dto) {
         return userService.updateUser(id, dto);
     }
 

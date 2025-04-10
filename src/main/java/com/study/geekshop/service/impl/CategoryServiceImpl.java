@@ -9,8 +9,6 @@ import com.study.geekshop.repository.CategoryRepository;
 import com.study.geekshop.service.CategoryService;
 import com.study.geekshop.service.mapper.CategoryMapper;
 import java.util.List;
-
-import jakarta.persistence.Id;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -33,7 +31,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public CategoryResponseDto findById(Long id) {
         Category categoryFromCache = categoryCache.get(id);
-        if (categoryFromCache != null){
+        if (categoryFromCache != null) {
             return categoryMapper.toDto(categoryFromCache);
         }
         Category category = categoryRepository.findById(id)

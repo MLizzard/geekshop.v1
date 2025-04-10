@@ -2,7 +2,6 @@ package com.study.geekshop.service;
 
 import com.study.geekshop.model.dto.request.UserRequestDto;
 import com.study.geekshop.model.dto.response.UserResponseDto;
-import com.study.geekshop.model.entity.User;
 import java.util.List;
 
 

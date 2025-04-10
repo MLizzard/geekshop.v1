@@ -29,7 +29,7 @@ public class UserMapper {
                 user.getEmail(),
                 user.getBirthDate(),
                 user.getOrders() != null ? user.getOrders().stream()
-                        .map(orderMapper::toDTO) // Здесь вызываем метод маппинга
+                        .map(orderMapper::toDto) // Здесь вызываем метод маппинга
                         .collect(Collectors.toList())
                         : List.of() // Пустой список, если заказов нет
         );

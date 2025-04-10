@@ -5,6 +5,7 @@ import com.study.geekshop.model.dto.request.OrderRequestDto;
 import com.study.geekshop.model.dto.response.OrderItemResponseDto;
 import com.study.geekshop.model.dto.response.OrderResponseDto;
 import com.study.geekshop.service.OrderService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
@@ -26,14 +27,14 @@ public class OrderController {
     }
 
     @PostMapping
-    public OrderResponseDto createOrder(@RequestBody OrderRequestDto orderRequestDto) {
+    public OrderResponseDto createOrder(@Valid @RequestBody OrderRequestDto orderRequestDto) {
         return orderService.createOrder(orderRequestDto);
     }
 
     @PutMapping("/{orderId}")
     public OrderResponseDto updateOrder(
             @PathVariable Long orderId,
-            @RequestBody OrderRequestDto orderRequestDto) {
+            @Valid @RequestBody OrderRequestDto orderRequestDto) {
         return orderService.updateOrder(orderId, orderRequestDto);
     }
 
@@ -59,7 +60,7 @@ public class OrderController {
     @PostMapping("/{orderId}/items")
     public OrderItemResponseDto createOrderItem(
             @PathVariable Long orderId,
-            @RequestBody OrderItemRequestDto orderItemRequestDto) {
+            @Valid @RequestBody OrderItemRequestDto orderItemRequestDto) {
         return orderService.createOrderItem(orderId, orderItemRequestDto);
     }
 
@@ -67,7 +68,7 @@ public class OrderController {
     public OrderItemResponseDto updateOrderItem(
             @PathVariable Long orderId,
             @PathVariable Long itemId,
-            @RequestBody OrderItemRequestDto orderItemRequestDto) {
+            @Valid @RequestBody OrderItemRequestDto orderItemRequestDto) {
         return orderService.updateOrderItem(orderId, itemId, orderItemRequestDto);
     }
 
