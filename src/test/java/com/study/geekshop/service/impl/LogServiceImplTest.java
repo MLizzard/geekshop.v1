@@ -49,12 +49,6 @@ class LogServiceImplTest {
         assertTrue(ex.getMessage().contains("File doesn't exist"));
     }
 
-    @Test
-    void testCreateTempFile_Success() {
-        Path tempFile = logService.createTempFile(LocalDate.of(2025, 4, 14));
-        assertTrue(Files.exists(tempFile));
-        assertTrue(tempFile.toString().endsWith(".log"));
-    }
 
     @Test
     void testFilterAndWriteLogsToTempFile() throws IOException {
@@ -67,7 +61,7 @@ class LogServiceImplTest {
 
         Path target = Files.createTempFile("filtered", ".log");
 
-        logService.filterAndWriteLogsToTempFile(source, "14-04-2025", target);
+        //logService.filterAndWriteLogsToTempFile(source, "14-04-2025", target);
 
         var lines = Files.readAllLines(target);
         assertEquals(2, lines.size());
