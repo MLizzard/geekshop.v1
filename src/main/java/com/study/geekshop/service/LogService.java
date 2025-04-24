@@ -11,9 +11,5 @@ public interface LogService {
 
     void validateLogFileExists(Path path);
 
-    Path createTempFile(LocalDate logDate);
-
-    void filterAndWriteLogsToTempFile(Path logFilePath, String formattedDate, Path tempFile);
-
     Resource createResourceFromTempFile(Path tempFile, String date);
 }

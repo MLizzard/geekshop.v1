@@ -2,7 +2,6 @@ package com.study.geekshop.controllers;
 
 import com.study.geekshop.service.LogService;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.Resource;
@@ -28,11 +27,13 @@ public class LogController {
     public ResponseEntity<Resource> downloadLogs(
             @RequestParam String date
     ) {
-        Resource resource = logService.getLogsByDate(date);
+        Resource logResource = logService.getLogsByDate(date);
+
+        String filename = "logs-" + date + ".log";
+
         return ResponseEntity.ok()
-                .contentType(MediaType.APPLICATION_OCTET_STREAM)
-                .header(HttpHeaders.CONTENT_DISPOSITION,
-                        "attachment; filename=\"" + resource.getFilename() + "\"")
-                .body(resource);
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + filename)
+                .contentType(MediaType.TEXT_PLAIN)
+                .body(logResource);
     }
 }
