@@ -3,12 +3,12 @@ package com.study.geekshop.controllers;
 import com.study.geekshop.model.dto.request.CategoryRequestDto;
 import com.study.geekshop.model.dto.response.CategoryResponseDto;
 import com.study.geekshop.service.CategoryService;
-import java.util.List;
-
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -29,36 +29,42 @@ public class CategoryController {
     @GetMapping
     @Operation(summary = "Get all categories",
             description = "Returns a list of all available categories.")
-    public List<CategoryResponseDto> findAll() {
-        return categoryService.findAll();
+    public ResponseEntity<List<CategoryResponseDto>> findAll() {
+        List<CategoryResponseDto> categories = categoryService.findAll();
+        return ResponseEntity.ok(categories);
     }
 
     @GetMapping("/{id}")
     @Operation(summary = "Get category by ID",
             description = "Returns a category based on the provided identifier.")
-    public CategoryResponseDto findById(@PathVariable Long id) {
-        return categoryService.findById(id);
+    public ResponseEntity<CategoryResponseDto> findById(@PathVariable Long id) {
+        CategoryResponseDto category = categoryService.findById(id);
+        return ResponseEntity.ok(category);
     }
 
     @PostMapping
     @Operation(summary = "Create a new category",
             description = "Creates a new category based on the provided data.")
-    public CategoryResponseDto create(@Valid @RequestBody CategoryRequestDto dto) {
-        return categoryService.create(dto);
+    public ResponseEntity<CategoryResponseDto> create(@Valid @RequestBody CategoryRequestDto dto) {
+        CategoryResponseDto created = categoryService.create(dto);
+        return ResponseEntity.status(201).body(created);
     }
 
     @PutMapping("/{id}")
     @Operation(summary = "Update an existing category",
-            description = "Updates the data of an existing category based on the provided identifier.")
-    public CategoryResponseDto update(@PathVariable Long id, @Valid @RequestBody CategoryRequestDto dto) {
-        return categoryService.update(id, dto);
+            description = "Updates the data of an existing category")
+    public ResponseEntity<CategoryResponseDto> update(@PathVariable Long id,
+                                                      @Valid @RequestBody CategoryRequestDto dto) {
+        CategoryResponseDto updated = categoryService.update(id, dto);
+        return ResponseEntity.ok(updated);
     }
 
     @DeleteMapping("/{id}")
     @Operation(summary = "Delete a category",
             description = "Deletes a category based on the provided identifier.")
-    public void delete(@PathVariable Long id) {
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
         categoryService.delete(id);
+        return ResponseEntity.noContent().build();
     }
 }
 

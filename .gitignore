@@ -51,4 +51,5 @@ Thumbs.db
 logs/
 *.log
 *.tmp
+*.gz
 hs_err_pid*

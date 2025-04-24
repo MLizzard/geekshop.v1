@@ -1,12 +1,12 @@
 package com.study.geekshop.exceptions;
 
 import jakarta.persistence.EntityNotFoundException;
+import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import java.util.List;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -20,7 +20,8 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
-    public ResponseEntity<ErrorResponse> handleIllegalArgumentException(IllegalArgumentException ex) {
+    public ResponseEntity<ErrorResponse>
+        handleIllegalArgumentException(IllegalArgumentException ex) {
         ErrorResponse errorResponse = new ErrorResponse(
                 HttpStatus.BAD_REQUEST.value(), ex.getMessage()
         );
@@ -28,7 +29,8 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<List<ErrorResponse>> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex) {
+    public ResponseEntity<List<ErrorResponse>>
+        handleMethodArgumentNotValidException(MethodArgumentNotValidException ex) {
         List<ErrorResponse> errorResponses = ex.getBindingResult()
                 .getFieldErrors()
                 .stream()

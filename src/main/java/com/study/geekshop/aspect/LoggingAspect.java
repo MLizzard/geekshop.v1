@@ -7,6 +7,7 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
 @Aspect
@@ -39,7 +40,16 @@ public class LoggingAspect {
                 resultString = "[object of type " + result.getClass().getSimpleName() + "]";
             }
 
-            logger.info("EXECUTED: {} RETURNED: {}", joinPoint.getSignature().toShortString(), resultString);
+            if (result instanceof ResponseEntity<?> responseEntity) {
+                int status = responseEntity.getStatusCodeValue();
+                logger.info("EXECUTED: {} RETURNED: {} STATUS: {}",
+                        joinPoint.getSignature().toShortString(),
+                        responseEntity.getBody(),
+                        status);
+            } else {
+                logger.info("EXECUTED: {} RETURNED: {}",
+                        joinPoint.getSignature().toShortString(), resultString);
+            }
         }
     }
 

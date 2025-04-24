@@ -6,13 +6,13 @@ import com.study.geekshop.model.dto.response.OrderResponseDto;
 import com.study.geekshop.model.dto.response.ProductResponseDto;
 import com.study.geekshop.model.entity.Order;
 import com.study.geekshop.model.entity.OrderItem;
-import com.study.geekshop.model.enums.OrderStatus;
 import com.study.geekshop.model.entity.User;
+import com.study.geekshop.model.enums.OrderStatus;
 import com.study.geekshop.repository.UserRepository;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
 import java.time.LocalDateTime;
 import java.util.List;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor

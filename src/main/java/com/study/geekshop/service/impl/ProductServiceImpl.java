@@ -91,6 +91,23 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    public List<ProductResponseDto> createAll(List<ProductRequestDto> dtos) {
+        return dtos.stream()
+                .map(dto -> {
+                    Product product = productMapper.toEntity(dto);
+
+                    Category category = categoryRepository.findById(dto.getCategoryId())
+                            .orElseThrow(() -> new CategoryNotFoundException("Категория не найдена"));
+
+                    product.setCategory(category);
+                    Product saved = productRepository.save(product);
+                    productCache.put(saved.getId(), saved);
+                    return productMapper.toDto(saved);
+                })
+                .toList();
+    }
+
+    @Override
     public ProductResponseDto update(Long id, ProductRequestDto dto) {
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new ProductNotFoundException("Продукт не найден"));

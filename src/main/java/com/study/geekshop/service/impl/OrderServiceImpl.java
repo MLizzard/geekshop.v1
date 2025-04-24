@@ -16,9 +16,9 @@ import com.study.geekshop.repository.UserRepository;
 import com.study.geekshop.service.OrderService;
 import com.study.geekshop.service.mapper.OrderItemMapper;
 import com.study.geekshop.service.mapper.OrderMapper;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -75,8 +75,9 @@ public class OrderServiceImpl implements OrderService {
         List<OrderItem> updatedItems = orderRequestDto.getItems().stream()
                 .map(orderItemMapper::toEntity)
                 .toList();
-        existingOrder.getItems().clear();
-        existingOrder.getItems().addAll(updatedItems);
+
+        existingOrder.setItems(updatedItems);
+
 
         Order updatedOrder = orderRepository.save(existingOrder);
         orderCache.put(updatedOrder.getId(), updatedOrder);
@@ -106,7 +107,8 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public OrderItemResponseDto createOrderItem(Long orderId, OrderItemRequestDto orderItemRequestDto) {
+    public OrderItemResponseDto createOrderItem(Long orderId,
+                                                OrderItemRequestDto orderItemRequestDto) {
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(() -> new OrderNotFoundException("Order not found"));
 
@@ -118,7 +120,9 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public OrderItemResponseDto updateOrderItem(Long orderId, Long itemId, OrderItemRequestDto orderItemRequestDto) {
+    public OrderItemResponseDto updateOrderItem(Long orderId,
+                                                Long itemId,
+                                                OrderItemRequestDto orderItemRequestDto) {
         OrderItem orderItem = orderItemRepository.findByIdAndOrderId(itemId, orderId)
                 .orElseThrow(() -> new OrderNotFoundException("OrderItem not found"));
 
@@ -134,5 +138,6 @@ public class OrderServiceImpl implements OrderService {
                 .orElseThrow(() -> new OrderNotFoundException("OrderItem not found"));
         orderItemRepository.delete(orderItem);
     }
+
 }
 

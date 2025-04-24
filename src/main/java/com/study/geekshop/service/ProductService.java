@@ -19,6 +19,8 @@ public interface ProductService {
 
     ProductResponseDto create(ProductRequestDto dto);
 
+    List<ProductResponseDto> createAll(List<ProductRequestDto> productRequestDtos);
+
     ProductResponseDto update(Long id, ProductRequestDto dto);
 
     void delete(Long id);

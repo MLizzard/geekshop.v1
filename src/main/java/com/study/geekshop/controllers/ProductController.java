@@ -23,15 +23,15 @@ public class ProductController {
     @GetMapping
     @Operation(summary = "Get all products",
             description = "Returns a list of all available products.")
-    public List<ProductResponseDto> findAll() {
-        return productService.findAll();
+    public ResponseEntity<List<ProductResponseDto>> findAll() {
+        return ResponseEntity.ok(productService.findAll());
     }
 
     @GetMapping("/{id}")
     @Operation(summary = "Get product by ID",
             description = "Returns a product based on the provided identifier.")
-    public ProductResponseDto findById(@PathVariable Long id) {
-        return productService.findById(id);
+    public ResponseEntity<ProductResponseDto> findById(@PathVariable Long id) {
+        return ResponseEntity.ok(productService.findById(id));
     }
 
     @GetMapping("/search/category/id")
@@ -68,16 +68,24 @@ public class ProductController {
     @PostMapping
     @Operation(summary = "Create a new product",
             description = "Creates a new product based on the provided data.")
-    public ProductResponseDto create(@Valid @RequestBody ProductRequestDto dto) {
-        return productService.create(dto);
+    public ResponseEntity<ProductResponseDto> create(@Valid @RequestBody ProductRequestDto dto) {
+        return ResponseEntity.ok(productService.create(dto));
+    }
+
+    @PostMapping("/bulk")
+    @Operation(summary = "Bulk create products",
+            description = "Создаёт несколько продуктов за один запрос.")
+    public ResponseEntity<List<ProductResponseDto>> createAll(
+            @Valid @RequestBody List<ProductRequestDto> dtos) {
+        return ResponseEntity.ok(productService.createAll(dtos));
     }
 
     @PutMapping("/{id}")
     @Operation(summary = "Update an existing product",
             description = "Updates the data of an existing product based on the provided identifier.")
-    public ProductResponseDto update(@PathVariable Long id,
+    public ResponseEntity<ProductResponseDto> update(@PathVariable Long id,
                                      @Valid @RequestBody ProductRequestDto dto) {
-        return productService.update(id, dto);
+        return ResponseEntity.ok(productService.update(id, dto));
     }
 
     @DeleteMapping("/{id}")
