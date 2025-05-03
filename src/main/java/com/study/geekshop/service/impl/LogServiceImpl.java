@@ -1,6 +1,7 @@
 package com.study.geekshop.service.impl;
 
 import com.study.geekshop.exceptions.InternalServerErrorException;
+import com.study.geekshop.exceptions.LogNotReadyException;
 import com.study.geekshop.model.entity.LogTaskInfo;
 import com.study.geekshop.service.LogService;
 import jakarta.persistence.EntityNotFoundException;
@@ -8,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
+
 import java.io.*;
 import java.nio.file.*;
 import java.time.LocalDate;
@@ -116,7 +118,7 @@ public class LogServiceImpl implements LogService {
         executor.submit(() -> {
             try {
                 taskInfo.setStatus(LogTaskInfo.Status.PENDING);
-                Thread.sleep(15000);
+                Thread.sleep(10000); // artificial delay
                 LocalDate logDate = parseDate(date);
                 Path file;
                 if (logDate.equals(LocalDate.now())) {
@@ -146,8 +148,12 @@ public class LogServiceImpl implements LogService {
     public Resource getLogFile(UUID id) {
         LogTaskInfo info = tasks.get(id);
         if (info == null) throw new EntityNotFoundException("No such task: " + id);
+
+        if (info.getStatus() == LogTaskInfo.Status.FAILED)
+            throw new InternalServerErrorException("Log task failed: " + info.getErrorMessage());
+
         if (info.getStatus() != LogTaskInfo.Status.READY)
-            throw new IllegalStateException("Log not ready for download");
+            throw new LogNotReadyException("Log is still being prepared");
 
         try {
             return new UrlResource(info.getFile().toUri());

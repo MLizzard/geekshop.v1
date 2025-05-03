@@ -1,5 +1,6 @@
 package com.study.geekshop.controllers;
 
+import com.study.geekshop.exceptions.LogNotReadyException;
 import com.study.geekshop.model.entity.LogTaskInfo;
 import com.study.geekshop.service.LogService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -21,13 +22,10 @@ public class LogController {
 
     private final LogService logService;
 
-    @Operation(summary = "Get .log file")
+    @Operation(summary = "Get .log file (synchronous)")
     @GetMapping("/download")
-    public ResponseEntity<Resource> downloadLogs(
-            @RequestParam String date
-    ) {
+    public ResponseEntity<Resource> downloadLogs(@RequestParam String date) {
         Resource logResource = logService.getLogsByDate(date);
-
         String filename = "logs-" + date + ".log";
 
         return ResponseEntity.ok()
@@ -36,23 +34,32 @@ public class LogController {
                 .body(logResource);
     }
 
+    @Operation(summary = "Start async log preparation")
     @GetMapping("/prepare")
     public ResponseEntity<String> prepareLogs(@RequestParam String date) {
         UUID taskId = logService.prepareLogsAsync(date);
-        return ResponseEntity.ok(taskId.toString());
+        return ResponseEntity.accepted().body(taskId.toString()); // 202 Accepted
     }
 
+    @Operation(summary = "Get status of async log preparation")
     @GetMapping("/status/{id}")
     public ResponseEntity<LogTaskInfo.Status> getStatus(@PathVariable UUID id) {
         return ResponseEntity.ok(logService.getLogStatus(id));
     }
 
+    @Operation(summary = "Download async prepared log file by ID")
     @GetMapping("/download/{id}")
-    public ResponseEntity<Resource> downloadLogs(@PathVariable UUID id) {
-        Resource resource = logService.getLogFile(id);
-        return ResponseEntity.ok()
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=logs-" + id + ".log")
-                .contentType(MediaType.TEXT_PLAIN)
-                .body(resource);
+    public ResponseEntity<?> downloadLogs(@PathVariable UUID id) {
+        try {
+            Resource resource = logService.getLogFile(id);
+            String filename = "logs-" + id + ".log";
+
+            return ResponseEntity.ok()
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + filename)
+                    .contentType(MediaType.TEXT_PLAIN)
+                    .body(resource);
+        } catch (LogNotReadyException e) {
+            return ResponseEntity.status(202).body("Log is still being prepared. Please try again later.");
+        }
     }
 }
