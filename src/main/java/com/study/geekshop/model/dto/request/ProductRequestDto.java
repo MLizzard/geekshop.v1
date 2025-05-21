@@ -7,6 +7,7 @@ import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.web.multipart.MultipartFile;
 
 @Data
 @AllArgsConstructor
@@ -21,7 +22,7 @@ public class ProductRequestDto {
     @Positive(message = "Price must be positive")
     private Double price;
 
-    @Size(max = 255, message = "Description must be up to 255 characters")
+    @Size(max = 511, message = "Description must be up to 255 characters")
     private String description;
 
     @NotNull(message = "Stock status must not be null")
@@ -30,4 +31,7 @@ public class ProductRequestDto {
     @NotNull(message = "Category must not be null")
     @Positive(message = "Category ID must be positive")
     private Long categoryId;
+
+    @NotNull(message = "Image must not be null")
+    private MultipartFile image;
 }

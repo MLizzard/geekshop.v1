@@ -3,6 +3,7 @@ package com.study.geekshop.service.impl;
 import com.study.geekshop.cache.ProductCache;
 import com.study.geekshop.exceptions.CategoryNotFoundException;
 import com.study.geekshop.exceptions.ProductNotFoundException;
+import com.study.geekshop.exceptions.StorageException;
 import com.study.geekshop.model.dto.request.ProductRequestDto;
 import com.study.geekshop.model.dto.response.ProductResponseDto;
 import com.study.geekshop.model.entity.Category;
@@ -10,10 +11,12 @@ import com.study.geekshop.model.entity.Product;
 import com.study.geekshop.repository.CategoryRepository;
 import com.study.geekshop.repository.ProductRepository;
 import com.study.geekshop.service.ProductService;
+import com.study.geekshop.service.StorageService;
 import com.study.geekshop.service.mapper.ProductMapper;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Primary;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import java.util.List;
 
@@ -27,6 +30,7 @@ public class ProductServiceImpl implements ProductService {
     private final CategoryRepository categoryRepository;
     private final ProductMapper productMapper;
     private final ProductCache productCache;
+    private final StorageService storageService;
 
     @Override
     public List<ProductResponseDto> findAll() {
@@ -128,5 +132,58 @@ public class ProductServiceImpl implements ProductService {
     public void delete(Long id) {
         productRepository.deleteById(id);
         productCache.remove(id);
+    }
+
+    @Override
+    @Transactional
+    public ProductResponseDto createProductWithImage(ProductRequestDto productDto) {
+        Product product = productMapper.toEntity(productDto);
+        Category category = categoryRepository.findById(productDto.getCategoryId())
+                .orElseThrow(() -> new CategoryNotFoundException("Категория не найдена"));
+        product.setCategory(category);
+
+        // обработка изображения
+        if (productDto.getImage() != null && !productDto.getImage().isEmpty()) {
+            String filename = storageService.store(productDto.getImage());
+            product.setImageUrl(filename);
+        }
+
+        Product savedProduct = productRepository.save(product);
+        return productMapper.toDto(savedProduct);
+    }
+
+    @Override
+    @Transactional
+    public ProductResponseDto updateProductWithImage(Long id, ProductRequestDto productDto) {
+        Product existingProduct = productRepository.findById(id)
+                .orElseThrow(() -> new ProductNotFoundException(id.toString()));
+
+        existingProduct.setName(productDto.getName());
+        existingProduct.setPrice(productDto.getPrice());
+        existingProduct.setDescription(productDto.getDescription());
+        existingProduct.setInStock(productDto.getInStock());
+
+        if (productDto.getImage() != null && !productDto.getImage().isEmpty()) {
+            if (existingProduct.getImageUrl() != null) {
+                storageService.delete(existingProduct.getImageUrl());
+            }
+
+            // Сохраняем новое
+            String newFilename = storageService.store(productDto.getImage());
+            existingProduct.setImageUrl(newFilename);
+        }
+
+        Product updatedProduct = productRepository.save(existingProduct);
+        return productMapper.toDto(updatedProduct);
+    }
+
+    @Override
+    public Resource getProductImage(Long productId) {
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new StorageException("Product not found"));
+        if (product.getImageUrl() == null) {
+            throw new StorageException("Image not found for product");
+        }
+        return storageService.loadAsResource(product.getImageUrl());
     }
 }

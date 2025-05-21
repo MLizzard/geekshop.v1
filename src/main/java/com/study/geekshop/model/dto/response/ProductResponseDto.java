@@ -14,4 +14,5 @@ public class ProductResponseDto {
     private String description;
     private boolean inStock;
     private CategoryResponseDto category;
+    private String imageUrl;
 }

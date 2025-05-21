@@ -2,6 +2,8 @@ package com.study.geekshop.service;
 
 import com.study.geekshop.model.dto.request.ProductRequestDto;
 import com.study.geekshop.model.dto.response.ProductResponseDto;
+import org.springframework.core.io.Resource;
+
 import java.util.List;
 
 public interface ProductService {
@@ -24,4 +26,10 @@ public interface ProductService {
     ProductResponseDto update(Long id, ProductRequestDto dto);
 
     void delete(Long id);
+
+    ProductResponseDto createProductWithImage(ProductRequestDto productDto);
+
+    ProductResponseDto updateProductWithImage(Long id, ProductRequestDto productDto);
+
+    Resource getProductImage(Long productId);
 }

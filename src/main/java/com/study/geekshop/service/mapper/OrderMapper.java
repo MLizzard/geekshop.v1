@@ -59,7 +59,8 @@ public class OrderMapper {
                                 orderItem.getProduct().getDescription(),
                                 orderItem.getProduct().isInStock(),
                                 categoryMapper
-                                        .toDto(orderItem.getProduct().getCategory()) // Категория
+                                        .toDto(orderItem.getProduct().getCategory()), // Категория
+                                orderItem.getProduct().getImageUrl()
                         ),
                         orderItem.getQuantity(),
                         orderItem.getPrice()

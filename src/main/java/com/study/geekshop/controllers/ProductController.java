@@ -9,6 +9,8 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.io.Resource;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -93,5 +95,26 @@ public class ProductController {
             description = "Deletes a product based on the provided identifier.")
     public void delete(@PathVariable Long id) {
         productService.delete(id);
+    }
+
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<ProductResponseDto> createProductWithImage(
+            @ModelAttribute ProductRequestDto productDto) {
+        return ResponseEntity.ok(productService.createProductWithImage(productDto));
+    }
+
+    @GetMapping("/{id}/image")
+    public ResponseEntity<Resource> getProductImage(@PathVariable Long id) {
+        Resource image = productService.getProductImage(id);
+        return ResponseEntity.ok()
+                .contentType(MediaType.IMAGE_JPEG) // или другой подходящий тип
+                .body(image);
+    }
+
+    @PutMapping(value = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<ProductResponseDto> updateProductWithImage(
+            @PathVariable Long id,
+            @ModelAttribute ProductRequestDto productDto) {
+        return ResponseEntity.ok(productService.updateProductWithImage(id, productDto));
     }
 }

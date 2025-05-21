@@ -25,6 +25,7 @@ public class Product {
     private double price;
     private String description;
     private boolean inStock;
+    private String imageUrl;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id")

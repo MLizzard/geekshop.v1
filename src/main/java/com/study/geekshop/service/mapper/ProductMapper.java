@@ -30,7 +30,8 @@ public class ProductMapper {
                 product.getPrice(),
                 product.getDescription(),
                 product.isInStock(),
-                categoryDto
+                categoryDto,
+                product.getImageUrl()
         );
     }
 }
