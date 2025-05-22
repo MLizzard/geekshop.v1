@@ -1,0 +1,62 @@
+version: '3.8'
+
+services:
+  # Сервис базы данных PostgreSQL
+  postgres:
+    image: postgres:15-alpine
+    container_name: postgres_db
+    environment:
+      POSTGRES_DB: product_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: admin
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - app-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d product_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  # Сервис Spring Boot приложения
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: spring_app
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/product_db
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: admin
+      SPRING_JPA_HIBERNATE_DDL-AUTO: update
+    ports:
+      - "8080:8080"
+    networks:
+      - app-network
+    restart: unless-stopped
+
+  # Опциональный сервис для фронтенда (пример для React)
+  # frontend:
+  #   build:
+  #     context: ./frontend
+  #     dockerfile: Dockerfile
+  #   container_name: react_app
+  #   ports:
+  #     - "3000:3000"
+  #   networks:
+  #     - app-network
+  #   depends_on:
+  #     - backend
+
+volumes:
+  postgres_data:
+
+networks:
+  app-network:
+    driver: bridge
