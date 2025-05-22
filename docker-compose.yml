@@ -41,18 +41,18 @@ services:
       - app-network
     restart: unless-stopped
 
-  # Опциональный сервис для фронтенда (пример для React)
-  # frontend:
-  #   build:
-  #     context: ./frontend
-  #     dockerfile: Dockerfile
-  #   container_name: react_app
-  #   ports:
-  #     - "3000:3000"
-  #   networks:
-  #     - app-network
-  #   depends_on:
-  #     - backend
+
+  frontend:
+    build:
+      context: ../../geekshop-Frontend/frontend
+      dockerfile: Dockerfile
+    container_name: react_app
+    ports:
+      - "3000:80"
+    networks:
+      - app-network
+    depends_on:
+      - backend
 
 volumes:
   postgres_data:

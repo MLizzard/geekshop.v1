@@ -149,6 +149,7 @@ public class ProductServiceImpl implements ProductService {
         }
 
         Product savedProduct = productRepository.save(product);
+        productCache.put(savedProduct.getId(), savedProduct);
         return productMapper.toDto(savedProduct);
     }
 
@@ -174,6 +175,7 @@ public class ProductServiceImpl implements ProductService {
         }
 
         Product updatedProduct = productRepository.save(existingProduct);
+        productCache.put(updatedProduct.getId(), updatedProduct);
         return productMapper.toDto(updatedProduct);
     }
 
