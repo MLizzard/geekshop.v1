@@ -1,14 +1,13 @@
-# Используем официальный образ OpenJDK
-FROM eclipse-temurin:17-jdk-jammy
-
-# Рабочая директория в контейнере
+# Этап 1: Сборка JAR-файла
+FROM maven:3.8.9-openjdk-17 AS build
 WORKDIR /app
+COPY pom.xml .
+COPY src ./src
+RUN mvn clean package -DskipTests  # Пропускаем тесты для ускорения
 
-# Копируем JAR-файл в контейнер
-COPY target/*.jar app.jar
-
-# Открываем порт, на котором работает Spring Boot
+# Этап 2: Запуск приложения
+FROM eclipse-temurin:17-jdk-jammy
+WORKDIR /app
+COPY --from=build /app/target/*.jar app.jar
 EXPOSE 8080
-
-# Запускаем приложение
 ENTRYPOINT ["java", "-jar", "app.jar"]
