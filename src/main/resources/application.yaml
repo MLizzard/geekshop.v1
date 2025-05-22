@@ -13,9 +13,9 @@ spring:
       allowed-headers: "*"
       allow-credentials: true
   datasource:
-    url: jdbc:postgresql://localhost:5432/product_db
-    username: ${DB_USERNAME:postgres}
-    password: ${DB_PASSWORD:admin}
+    url: jdbc:postgresql://admin:7RARKUBnf78e5iCyFDTQPfTU213AgyER@dpg-d0nk8l9r0fns7394un50-a.oregon-postgres.render.com:5432/product_db_dxeb
+    username: admin
+    password: 7RARKUBnf78e5iCyFDTQPfTU213AgyER
     driver-class-name: org.postgresql.Driver
     hikari:
       connection-timeout: 5000
